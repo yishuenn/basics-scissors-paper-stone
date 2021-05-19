@@ -1,1 +1,1 @@
-# Scissors Paper Stone
+# # Rocket Academy Coding Basics: Scissors Paper Stone
