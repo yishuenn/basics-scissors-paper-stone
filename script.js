@@ -86,7 +86,16 @@ var getDefaultObjectsMessage = function (playerObject, computerObject) {
  * Return standard string representing player's and computer's win-loss records
  */
 var getDefaultWinLossMessage = function () {
-  return `<br> ${userName}: ${numPlayerWins} | Computer: ${numComputerWins} | Draws: ${numDraws}`;
+  return (
+    '<br>' +
+    userName +
+    ': ' +
+    numPlayerWins +
+    ' | Computer: ' +
+    numComputerWins +
+    ' | Draws: ' +
+    numDraws
+  );
 };
 
 // Check whether player draws with computer
@@ -116,8 +125,11 @@ var main = function (input) {
     // Template literals using backticks (`) allow us to include variables
     // inside strings seamlessly with ${} syntax.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
-    return `Thank you ${userName}! 
-    To start playing SPS, please enter "scissors", "paper", or "stone".`;
+    return (
+      'Thank you ' +
+      userName +
+      '!  To start playing SPS, please enter "scissors", "paper", or "stone".'
+    );
   }
 
   // If userName is populated, validate that input is one of scissors, paper, or stone
@@ -148,29 +160,34 @@ var main = function (input) {
     // Increment num draws in win-loss record
     numDraws += 1;
     // Use <br> to create new lines in HTML output.
-    return `${defaultObjectsMessage} <br><br>
-      It's a draw! <br><br>
-      ${getDefaultWinLossMessage()}`;
+    return (
+      defaultObjectsMessage +
+      "<br><br> It's a draw! <br><br> " +
+      getDefaultWinLossMessage()
+    );
   }
 
   // If not draw, check if player wins
   if (doesPlayerBeatComputer(playerObject, computerObject)) {
     // Increment num player wins in win-loss record
     numPlayerWins += 1;
-    return `${defaultObjectsMessage} <br><br>
-      ${userName} wins! <br><br>
-
-      ${REPLAY_INSTRUCTIONS}
-      
-      ${getDefaultWinLossMessage()}`;
+    return (
+      defaultObjectsMessage +
+      '<br><br>' +
+      userName +
+      ' wins! <br><br>' +
+      REPLAY_INSTRUCTIONS +
+      '<br>' +
+      getDefaultWinLossMessage()
+    );
   }
   // If it's not a draw and player has not won, then computer wins.
   // Increment num computer wins in win-loss record
   numComputerWins += 1;
-  return `${defaultObjectsMessage} <br><br>
-    You lose! Bummer <br><br>
-    
-    ${REPLAY_INSTRUCTIONS}
-    
-    ${getDefaultWinLossMessage()}`;
+  return (
+    defaultObjectsMessage +
+    '<br><br> You lose! Bummer <br><br>' +
+    REPLAY_INSTRUCTIONS +
+    getDefaultWinLossMessage()
+  );
 };
