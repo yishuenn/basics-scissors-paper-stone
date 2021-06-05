@@ -14,14 +14,6 @@ var REVERSED_STONE = 'reversed stone';
 var REPLAY_INSTRUCTIONS =
   'Now you can type "scissors" "paper" or "stone" to play another round!';
 
-// Keep track of user's name to personalise the game.
-var userName = '';
-
-// Initialise the number of player wins, computer wins, and draws to 0.
-var numPlayerWins = 0;
-var numComputerWins = 0;
-var numDraws = 0;
-
 /**
  * Return "scissors", "paper", or "stone" based on a random number
  */
@@ -55,10 +47,13 @@ var doesPlayerBeatComputer = function (playerObject, computerObject) {
   );
 };
 
-// Set a fn that will return an icon based on a  given object
+/**
+ * Set a fn that will return an icon based on a  given object
+ * @param {string} object
+ */
 var getObjectIcon = function (object) {
   if (object == SCISSORS || object == REVERSED_SCISSORS) return ' ✂️';
-  if (object == PAPER || object == REVERSED_PAPER) return ' 📄';
+  if (object == PAPER || object == REVERSED_PAPER) return ' 🗒';
   if (object == STONE || object == REVERSED_STONE) return ' 🪨';
 };
 
@@ -67,7 +62,6 @@ var getObjectIcon = function (object) {
  * @param {*} playerObject
  * @param {*} computerObject
  */
-
 var getDefaultObjectsMessage = function (playerObject, computerObject) {
   var playerObjectIcon = getObjectIcon(playerObject);
   var computerObjectIcon = getObjectIcon(computerObject);
@@ -83,22 +77,10 @@ var getDefaultObjectsMessage = function (playerObject, computerObject) {
 };
 
 /**
- * Return standard string representing player's and computer's win-loss records
+ * Check whether player draws with computer
+ * @param {string} playerObject
+ * @param {string} computerObject
  */
-var getDefaultWinLossMessage = function () {
-  return (
-    '<br>' +
-    userName +
-    ': ' +
-    numPlayerWins +
-    ' | Computer: ' +
-    numComputerWins +
-    ' | Draws: ' +
-    numDraws
-  );
-};
-
-// Check whether player draws with computer
 var doesPlayerDrawWComputer = function (playerObject, computerObject) {
   return (
     playerObject == computerObject ||
@@ -110,27 +92,10 @@ var doesPlayerDrawWComputer = function (playerObject, computerObject) {
 
 /**
  * Play SPS with user input, return game result.
- * @param {string} input - Player's object
+ * @param {string} input - Player's object (e.g. scissors, paper, stone)
  */
 var main = function (input) {
-  // If userName is not yet set, accept user's first input as userName, and
-  // return an output that prompts the user to start playing SPS.
-  if (!userName) {
-    // If the user did not input anything, prompt them to enter something
-    // as their user name.
-    if (!input) {
-      return 'Please input a non-empty string as your user name!';
-    }
-    userName = input;
-
-    return (
-      'Thank you ' +
-      userName +
-      '!  To start playing SPS, please enter "scissors", "paper", or "stone".'
-    );
-  }
-
-  // If userName is populated, validate that input is one of scissors, paper, or stone
+  // Validate that input is one of scissors, paper, or stone
   if (
     input != SCISSORS &&
     input != PAPER &&
@@ -140,6 +105,8 @@ var main = function (input) {
     input != REVERSED_STONE
   ) {
     return 'Please input 1 of "scissors", "paper", or "stone" to play the game.';
+    // Side enote: recall what "return" statements do? <--ans: it exits the current function and returns the values that are included in the return statement.
+    // This implies that if the return statement in line 107 is triggered, the rest of the code (from line 109 onwards) won't be executed becos we would've exited from the function.
   }
 
   // Input is one of scissors, paper, or stone
@@ -155,37 +122,26 @@ var main = function (input) {
   // Compare player's object with computer's object and output win status
   // If player and computer objects are the same, it's a draw.
   if (doesPlayerDrawWComputer(playerObject, computerObject)) {
-    // Increment num draws in win-loss record
-    numDraws += 1;
     // Use <br> to create new lines in HTML output.
-    return (
-      defaultObjectsMessage +
-      "<br><br> It's a draw! <br><br> " +
-      getDefaultWinLossMessage()
-    );
+    return defaultObjectsMessage + "<br><br> It's a draw! <br><br> ";
   }
 
-  // If not draw, check if player wins
+  // If not a draw, check if player wins
   if (doesPlayerBeatComputer(playerObject, computerObject)) {
-    // Increment num player wins in win-loss record
-    numPlayerWins += 1;
     return (
       defaultObjectsMessage +
       '<br><br>' +
-      userName +
-      ' wins! <br><br>' +
+      ' You win! <br><br>' +
       REPLAY_INSTRUCTIONS +
-      '<br>' +
-      getDefaultWinLossMessage()
+      '<br>'
     );
   }
-  // If it's not a draw and player has not won, then computer wins.
+  // If we reach this part of the code, it implies that 1. it's not a draw, and 2. Player has not won; hence,  computer wins! (see note on line 106 if you're unclear why)
+  // Let's handle the output for this scenario:
   // Increment num computer wins in win-loss record
-  numComputerWins += 1;
   return (
     defaultObjectsMessage +
     '<br><br> You lose! Bummer <br><br>' +
-    REPLAY_INSTRUCTIONS +
-    getDefaultWinLossMessage()
+    REPLAY_INSTRUCTIONS
   );
 };
