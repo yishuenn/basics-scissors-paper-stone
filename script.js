@@ -8,6 +8,11 @@
 var SCISSORS = 'scissors';
 var PAPER = 'paper';
 var STONE = 'stone';
+var REVERSED_SCISSORS = 'reversed scissors';
+var REVERSED_PAPER = 'reversed paper';
+var REVERSED_STONE = 'reversed stone';
+var REPLAY_INSTRUCTIONS =
+  'Now you can type "scissors" "paper" or "stone" to play another round!';
 
 // Keep track of user's name to personalise the game.
 var userName = '';
@@ -43,8 +48,18 @@ var doesPlayerBeatComputer = function (playerObject, computerObject) {
   return (
     (playerObject == SCISSORS && computerObject == PAPER) ||
     (playerObject == PAPER && computerObject == STONE) ||
-    (playerObject == STONE && computerObject == SCISSORS)
+    (playerObject == STONE && computerObject == SCISSORS) ||
+    (playerObject == REVERSED_SCISSORS && computerObject == STONE) ||
+    (playerObject == REVERSED_PAPER && computerObject == SCISSORS) ||
+    (playerObject == REVERSED_STONE && computerObject == PAPER)
   );
+};
+
+// Set a fn that will return an icon based on a  given object
+var getObjectIcon = function (object) {
+  if (object == SCISSORS || object == REVERSED_SCISSORS) return ' ✂️';
+  if (object == PAPER || object == REVERSED_PAPER) return ' 📄';
+  if (object == STONE || object == REVERSED_STONE) return ' 🪨';
 };
 
 /**
@@ -52,16 +67,36 @@ var doesPlayerBeatComputer = function (playerObject, computerObject) {
  * @param {*} playerObject
  * @param {*} computerObject
  */
+
 var getDefaultObjectsMessage = function (playerObject, computerObject) {
-  return `${userName}'s object: ${playerObject} <br>
-    Computer's object: ${computerObject}.`;
+  var playerObjectIcon = getObjectIcon(playerObject);
+  var computerObjectIcon = getObjectIcon(computerObject);
+  return (
+    'The computer chose ' +
+    computerObject +
+    computerObjectIcon +
+    '<br><br>' +
+    'You chose ' +
+    playerObject +
+    playerObjectIcon
+  );
 };
 
 /**
  * Return standard string representing player's and computer's win-loss records
  */
 var getDefaultWinLossMessage = function () {
-  return `${userName}: ${numPlayerWins} | Computer: ${numComputerWins} | Draws: ${numDraws}`;
+  return `<br> ${userName}: ${numPlayerWins} | Computer: ${numComputerWins} | Draws: ${numDraws}`;
+};
+
+// Check whether player draws with computer
+var doesPlayerDrawWComputer = function (playerObject, computerObject) {
+  return (
+    playerObject == computerObject ||
+    (playerObject == REVERSED_SCISSORS && computerObject == SCISSORS) ||
+    (playerObject == REVERSED_PAPER && computerObject == PAPER) ||
+    (playerObject == REVERSED_STONE && computerObject == STONE)
+  );
 };
 
 /**
@@ -81,11 +116,19 @@ var main = function (input) {
     // Template literals using backticks (`) allow us to include variables
     // inside strings seamlessly with ${} syntax.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
-    return `Thank you ${userName}! To start playing SPS, please enter "scissors", "paper", or "stone".`;
+    return `Thank you ${userName}! 
+    To start playing SPS, please enter "scissors", "paper", or "stone".`;
   }
 
   // If userName is populated, validate that input is one of scissors, paper, or stone
-  if (input != SCISSORS && input != PAPER && input != STONE) {
+  if (
+    input != SCISSORS &&
+    input != PAPER &&
+    input != STONE &&
+    input != REVERSED_SCISSORS &&
+    input != REVERSED_PAPER &&
+    input != REVERSED_STONE
+  ) {
     return 'Please input 1 of "scissors", "paper", or "stone" to play the game.';
   }
 
@@ -101,7 +144,7 @@ var main = function (input) {
   );
   // Compare player's object with computer's object and output win status
   // If player and computer objects are the same, it's a draw.
-  if (playerObject == computerObject) {
+  if (doesPlayerDrawWComputer(playerObject, computerObject)) {
     // Increment num draws in win-loss record
     numDraws += 1;
     // Use <br> to create new lines in HTML output.
@@ -109,18 +152,25 @@ var main = function (input) {
       It's a draw! <br><br>
       ${getDefaultWinLossMessage()}`;
   }
+
   // If not draw, check if player wins
   if (doesPlayerBeatComputer(playerObject, computerObject)) {
     // Increment num player wins in win-loss record
     numPlayerWins += 1;
     return `${defaultObjectsMessage} <br><br>
       ${userName} wins! <br><br>
+
+      ${REPLAY_INSTRUCTIONS}
+      
       ${getDefaultWinLossMessage()}`;
   }
   // If it's not a draw and player has not won, then computer wins.
   // Increment num computer wins in win-loss record
   numComputerWins += 1;
   return `${defaultObjectsMessage} <br><br>
-    Computer wins! <br><br>
+    You lose! Bummer <br><br>
+    
+    ${REPLAY_INSTRUCTIONS}
+    
     ${getDefaultWinLossMessage()}`;
 };
