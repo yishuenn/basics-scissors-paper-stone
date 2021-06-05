@@ -122,9 +122,7 @@ var main = function (input) {
       return 'Please input a non-empty string as your user name!';
     }
     userName = input;
-    // Template literals using backticks (`) allow us to include variables
-    // inside strings seamlessly with ${} syntax.
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
+
     return (
       'Thank you ' +
       userName +
