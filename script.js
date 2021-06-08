@@ -242,7 +242,7 @@ var createPlayingInstructions = function () {
 /*
  * Set a function that crafts an appropriate output message to display when each round of the game ends
  */
-var createEndGameMsg = function (outcome, msgPreamble) {
+var createEndOfGameMsg = function (outcome, msgPreamble) {
   // create a string that describes the valid  scissors paper stone inputs
   var instructions =
     'Now you can type "scissors" "paper" or "stone" to play another round!';
@@ -252,10 +252,11 @@ var createEndGameMsg = function (outcome, msgPreamble) {
     instructions =
       'Now you can type "reversed scissors" "reversed paper" or "reversed stone" to play another round!';
   }
+  // if the mode is com vs com, inform user to click submit to scissors, paper or stone
   if (mode == COM_V_COM) {
     instructions = 'Click submit to roll scissors paper or stone';
   }
-
+  // manage the message when user wins
   if (outcome == WIN) {
     return (
       msgPreamble +
@@ -268,6 +269,7 @@ var createEndGameMsg = function (outcome, msgPreamble) {
     );
   }
 
+  // manage the message when user loses
   if (outcome == LOSE) {
     return (
       msgPreamble +
@@ -279,6 +281,7 @@ var createEndGameMsg = function (outcome, msgPreamble) {
     );
   }
 
+  // manage the message when user draws
   if (outcome == DRAW) {
     return (
       msgPreamble +
@@ -372,16 +375,7 @@ var main = function (input) {
         numPlayerWins += 1;
         // reset the SPS game
         resetSpsGame();
-        return createEndGameMsg(WIN, defaultObjectsMessage);
-        // return (
-        //   defaultObjectsMessage +
-        //   '<br><br>' +
-        //   userName +
-        //   ' wins! <br><br>' +
-        //   REPLAY_INSTRUCTIONS +
-        //   '<br>' +
-        //   getDefaultWinLossMessage()
-        // );
+        return createEndOfGameMsg(WIN, defaultObjectsMessage);
       }
 
       // if attacker is the computer, output a message that computer has won
@@ -389,26 +383,14 @@ var main = function (input) {
         numComputerWins += 1;
         // reset the SPS game
         resetSpsGame();
-        return createEndGameMsg(LOSE, defaultObjectsMessage);
-        // return (
-        //   defaultObjectsMessage +
-        //   '<br><br> You lose! Bummer <br><br>' +
-        //   REPLAY_INSTRUCTIONS +
-        //   getDefaultWinLossMessage()
-        // );
+        return createEndOfGameMsg(LOSE, defaultObjectsMessage);
       }
       // else, if we have not established an attacker, don't do anything
     }
     // If it's a draw and we are not playing Korean SPS
     // Increment num draws in win-loss record
     numDraws += 1;
-    return createEndGameMsg(DRAW, defaultObjectsMessage);
-
-    // return (
-    //   defaultObjectsMessage +
-    //   "<br><br> It's a draw! <br><br> " +
-    //   getDefaultWinLossMessage()
-    // );
+    return createEndOfGameMsg(DRAW, defaultObjectsMessage);
   }
 
   // If not draw, check if player wins
@@ -425,20 +407,11 @@ var main = function (input) {
     // if we are not playing Korean sps, treat this like a regular  SPS win:
     // Increment num player wins in win-loss record
     numPlayerWins += 1;
-    return createEndGameMsg(WIN, defaultObjectsMessage);
-    // return (
-    //   defaultObjectsMessage +
-    //   '<br><br>' +
-    //   userName +
-    //   ' wins! <br><br>' +
-    //   REPLAY_INSTRUCTIONS +
-    //   '<br>' +
-    //   getDefaultWinLossMessage()
-    // );
+    return createEndOfGameMsg(WIN, defaultObjectsMessage);
   }
 
   // If it's not a draw and player has not won, then computer wins.
-  // Increment num computer wins in win-loss record
+  // If it's a korean sps game, this is just an interim win, so re-assign the attacker to computer and prompt user to continue playing
   if (mode == KOREAN_SPS) {
     // make computer the attacker
     attacker = COMPUTER;
@@ -448,14 +421,7 @@ var main = function (input) {
       ' is now the attacker. Throw scissors paper or stone again'
     );
   }
-
+  // Else if not an sps game, increment num computer wins in win-loss record
   numComputerWins += 1;
-  return createEndGameMsg(LOSE, defaultObjectsMessage);
-
-  // return (
-  //   defaultObjectsMessage +
-  //   '<br><br> You lose! Bummer <br><br>' +
-  //   REPLAY_INSTRUCTIONS +
-  //   getDefaultWinLossMessage()
-  // );
+  return createEndOfGameMsg(LOSE, defaultObjectsMessage);
 };
