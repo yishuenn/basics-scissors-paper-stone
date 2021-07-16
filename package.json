@@ -1,0 +1,23 @@
+{
+  "name": "basics-ci-test",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rocketacademy/basics-ci-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rocketacademy/basics-ci-test/issues"
+  },
+  "homepage": "https://github.com/rocketacademy/basics-ci-test#readme",
+  "dependencies": {
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4"
+  },
+  "devDependencies": {
+    "eslint-plugin-sonarjs": "^0.8.0-125"
+  }
+}
