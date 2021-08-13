@@ -32,29 +32,34 @@ var main = function (input) {
 
   if (currentGameMode == 'waiting for player'){
   // set username
-  input = username;
+  username = input;
   // Game mode been switched
   currentGameMode = 'Game started';
-  myOutputValue = 'Hello' + username + 'Please enter rock/ scissors/ paper';
+  console.log(currentGameMode);
+  myOutputValue = 'Hello ' + input + ' Please enter rock / scissors / paper';
+  console.log(myOutputValue);
   return myOutputValue;
-  console.log(myOutputValue)};
+  };
 
 if (currentGameMode == 'Game started'){
   // Draw situation
   var computerchoice = numbertoword();
-  console.log(input, computerchoice);
+  console.log('player choose', input, 'computer choose', computerchoice);
     if (input == computerchoice) {
     playerdraw = playerdraw+1;
     myOutputValue = 'You drawed'};
 
   //Player wins
-    if (input ==scissors && computerchoice== paper) || (input == rock && computerchoice== scissors) || (input == paper && computerchoice == rock) {
+    if ((input ==scissors && computerchoice== paper) || (input == rock && computerchoice== scissors) || (input == paper && computerchoice == rock)) {
       playerwin = playerwin+1;
-      myOutputValue = 'You win'};
+      myOutputValue = 'You win';
+    }
 
   // Player lost
-    if (input ==paper && computerchoice== scissors) || (input == scissors && computerchoice== rock) || (input == rock && computerchoice == paper) {
+    if ((input ==paper && computerchoice== scissors) || (input == scissors && computerchoice== rock) || (input == rock && computerchoice == paper)) {
       playerlose = playerlose+1;
       myOutputValue = 'You lost'};
 };
   return myOutputValue;
+  
+};
