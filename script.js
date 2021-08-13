@@ -59,7 +59,13 @@ if (currentGameMode == 'Game started'){
     if ((input ==paper && computerchoice== scissors) || (input == scissors && computerchoice== rock) || (input == rock && computerchoice == paper)) {
       playerlose = playerlose+1;
       myOutputValue = 'You lost'};
+
+  //Error code
+   if (input != rock && input != scissors && input != paper){
+     myOutputValue = 'You have enter the incorrect input. Please enter rock / scissors / paper'
+   }
+
 };
-  return myOutputValue;
+  return ('Hey ' + username  + ' You have chosen ' + input + ' while' + ' The computer chose ' + computerchoice + '.' + '<br>' + myOutputValue + '<br><br>' + 'You have drawn ' +playerdraw + ' times ' + 'You have won ' + playerwin +' times' + ' You have lose ' + playerlose + ' times.');
   
 };
